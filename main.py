@@ -3,24 +3,17 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.subplots as sp
 import tkinter as tk
-from tkinter import filedialog
+from PyQt6.QtWidgets import QApplication, QFileDialog
 import plotly.io as pio
 
 # Funkce pro načtení více souborů
 def load_csv_files():
-    root = tk.Tk()
-    root.withdraw()  # Skryje hlavní okno Tkinter
-    file_paths = filedialog.askopenfilenames(filetypes=[("Data files", "*.csv;*.txt"), ("CSV files", "*.csv"), ("Text files", "*.txt")])
+    app = QApplication([])
+    file_paths, _ = QFileDialog.getOpenFileNames(
+        None, "Select Files", "", "CSV/TXT Files (*.csv *.txt)"
+    )
     return file_paths
 
-if sys.platform == "darwin":  # macOS
-    import ctypes
-
-    try:
-        appkit = ctypes.CDLL("/System/Library/Frameworks/AppKit.framework/AppKit")
-        appkit.NSApplicationLoad()
-    except OSError:
-        pass  # Pokud není dostupné, ignoruj
 
 # Načtení datových souborů
 file_paths = load_csv_files()
