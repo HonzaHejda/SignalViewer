@@ -52,7 +52,9 @@ num_emg_files = len(emg_file_paths)
 num_imu_files = len(imu_file_paths)
 
 # Vytvoření figure se subgrafy
-fig = sp.make_subplots(rows=num_emg_files+2*num_imu_files, cols=1, shared_xaxes=True, vertical_spacing=0.05,
+fig = sp.make_subplots(rows=num_emg_files+2*num_imu_files, cols=1,
+                       shared_xaxes=True, shared_yaxes=True,
+                       vertical_spacing=0.05,
                        subplot_titles=generate_plot_titles(num_emg_files, num_imu_files))
 
 # Načtení a zpracování každého souboru
@@ -77,9 +79,15 @@ for i, file_path in enumerate(emg_file_paths):
         imu_df["Time"] = imu_df.index / 100  # Vzorkovací frekvence 100 Hz
 
         # Přidání akcelerací
-        fig.add_trace(go.Scatter(x=imu_df["Time"], y=imu_df["Acc_X"], mode='lines', name=f"Acc_X {i+1} - IMU"), row=(i*3 if num_imu_files>0 else i) + 2, col=1)
-        fig.add_trace(go.Scatter(x=imu_df["Time"], y=imu_df["Acc_Y"], mode='lines', name=f"Acc_Y {i+1} - IMU"), row=(i*3 if num_imu_files>0 else i) + 2, col=1)
-        fig.add_trace(go.Scatter(x=imu_df["Time"], y=imu_df["Acc_Z"], mode='lines', name=f"Acc_Z {i+1} - IMU"), row=(i*3 if num_imu_files>0 else i) + 2, col=1)
+        fig.add_trace(
+            go.Scatter(x=imu_df["Time"], y=imu_df["Acc_X"], mode='lines', name=f"Acc_X {i+1} - IMU"),
+            row=(i*3 if num_imu_files>0 else i) + 2, col=1)
+        fig.add_trace(
+            go.Scatter(x=imu_df["Time"], y=imu_df["Acc_Y"], mode='lines', name=f"Acc_Y {i+1} - IMU"),
+            row=(i*3 if num_imu_files>0 else i) + 2, col=1)
+        fig.add_trace(
+            go.Scatter(x=imu_df["Time"], y=imu_df["Acc_Z"], mode='lines', name=f"Acc_Z {i+1} - IMU"),
+            row=(i*3 if num_imu_files>0 else i) + 2, col=1)
 
 
         # Výpočet Eulerových úhlů
@@ -96,7 +104,7 @@ for i, file_path in enumerate(emg_file_paths):
 
 # Nastavení layoutu
 fig.update_layout(
-    title="Interactive Time Series Visualization",
+    title="EMG signals",
     xaxis_title="Time (s)",
     height=600 * num_emg_files,
     showlegend=False,
