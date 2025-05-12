@@ -46,7 +46,7 @@ def process_folder(folder:Path) -> None:
 
     # ↪  maska '?_MT_*.txt' – přesně jeden znak před '_MT_'
     for infile in folder.glob("?_MT_*.txt"):
-        outfile = infile.with_name(f"{infile.stem}_quat{infile.suffix}")
+        outfile = infile.with_name(f"{infile.stem}_quat.csv")
         try:
             df = pd.read_csv(infile.resolve(), skiprows=3, sep="\t", dtype=float, header=1)
             df[quat_cols] = df[rot_cols].apply(mat_to_quat, axis=1, result_type="expand")
